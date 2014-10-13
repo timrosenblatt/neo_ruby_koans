@@ -14,7 +14,13 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
-  # WRITE THIS CODE
+  raise(TriangleError, "Can't be zero!") if a*b*c == 0
+  raise(TriangleError, "Can't be negative") if(a < 0 || b < 0 || c < 0)
+  raise(TriangleError, "Two sides must add up to bigger than the third") if(a+b <= c || c+a <= b || b+c <= a)
+  
+  return :equilateral if (a == b && b == c)
+  return :isosceles if (a == b || b == c || a == c)
+  :scalene
 end
 
 # Error class used in part 2.  No need to change this code.
