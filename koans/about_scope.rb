@@ -18,7 +18,7 @@ class AboutScope < Neo::Koan
   end
 
   def test_dog_is_not_available_in_the_current_scope
-    assert_raise(___) do
+    assert_raise(NameError) do
       Dog.new
     end
   end
@@ -26,8 +26,8 @@ class AboutScope < Neo::Koan
   def test_you_can_reference_nested_classes_using_the_scope_operator
     fido = Jims::Dog.new
     rover = Joes::Dog.new
-    assert_equal __, fido.identify
-    assert_equal __, rover.identify
+    assert_equal :jims_dog, fido.identify
+    assert_equal :joes_dog, rover.identify
 
     assert_equal __, fido.class != rover.class
     assert_equal __, Jims::Dog != Joes::Dog
