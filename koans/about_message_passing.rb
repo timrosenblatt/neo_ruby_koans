@@ -24,25 +24,27 @@ class AboutMessagePassing < Neo::Koan
     mc = MessageCatcher.new
 
     assert mc.send("caught?")
-    assert mc.send("caught" + __ )    # What do you need to add to the first string?
-    assert mc.send("CAUGHT?".____ )      # What would you need to do to the string?
+    assert mc.send("caught" + '?' )    # What do you need to add to the first string?
+    assert mc.send("CAUGHT?".downcase )      # What would you need to do to the string?
   end
 
   def test_send_with_underscores_will_also_send_messages
     mc = MessageCatcher.new
 
-    assert_equal __, mc.__send__(:caught?)
+    assert_equal true, mc.__send__(:caught?)
 
     # THINK ABOUT IT:
     #
     # Why does Ruby provide both send and __send__ ?
+    
+    # __send__ is harder to inadvertently override, and the send concept is very important
   end
 
   def test_classes_can_be_asked_if_they_know_how_to_respond
     mc = MessageCatcher.new
 
-    assert_equal __, mc.respond_to?(:caught?)
-    assert_equal __, mc.respond_to?(:does_not_exist)
+    assert_equal true, mc.respond_to?(:caught?)
+    assert_equal false, mc.respond_to?(:does_not_exist)
   end
 
   # ------------------------------------------------------------------
@@ -56,11 +58,11 @@ class AboutMessagePassing < Neo::Koan
   def test_sending_a_message_with_arguments
     mc = MessageCatcher.new
 
-    assert_equal __, mc.add_a_payload
-    assert_equal __, mc.send(:add_a_payload)
+    assert_equal [], mc.add_a_payload
+    assert_equal [], mc.send(:add_a_payload)
 
-    assert_equal __, mc.add_a_payload(3, 4, nil, 6)
-    assert_equal __, mc.send(:add_a_payload, 3, 4, nil, 6)
+    assert_equal [3,4,nil,6], mc.add_a_payload(3, 4, nil, 6)
+    assert_equal [3,4,nil,6], mc.send(:add_a_payload, 3, 4, nil, 6)
   end
 
   # NOTE:
@@ -78,7 +80,7 @@ class AboutMessagePassing < Neo::Koan
   def test_sending_undefined_messages_to_a_typical_object_results_in_errors
     typical = TypicalObject.new
 
-    exception = assert_raise(___) do
+    exception = assert_raise(NoMethodError) do
       typical.foobar
     end
     assert_match(/foobar/, exception.message)
@@ -87,7 +89,7 @@ class AboutMessagePassing < Neo::Koan
   def test_calling_method_missing_causes_the_no_method_error
     typical = TypicalObject.new
 
-    exception = assert_raise(___) do
+    exception = assert_raise(NoMethodError) do
       typical.method_missing(:foobar)
     end
     assert_match(/foobar/, exception.message)
