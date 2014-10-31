@@ -6,3 +6,4 @@ dist
 *.rbc
 #koans/*
 *~
+.DS_Store
